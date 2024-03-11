@@ -71,12 +71,26 @@ module ALU(
                         overflow =1'b0;
                         zero = 1'b0;
                         end
-            5'b10001: begin bool = (r1>r2)?1'b1:1'b0; // R1 < IMMEDIATE VALUE
+            5'b11001: begin 
+                        bool = (r1<r2)?1:0; // R1 < R2
                         accumulator = 'b0;
                         carry = 1'b0;
                         overflow =1'b0;
                         zero = 1'b0;
-                        end // immediate
+                        end
+            5'b10001: begin bool = (r1>r2)?1'b1:1'b0; // R1 > IMMEDIATE VALUE
+                        accumulator = 'b0;
+                        carry = 1'b0;
+                        overflow =1'b0;
+                        zero = 1'b0;
+                        end
+            5'b00111:begin begin bool = (r1<r2)?1'b1:1'b0; // R1 < IMMEDIATE VALUE
+                        accumulator = 'b0;
+                        carry = 1'b0;
+                        overflow =1'b0;
+                        zero = 1'b0;
+                        end
+                        end
             5'b10010: begin bool = (r1==r2)?1:0; // R1 EQUAL TO R2
                         accumulator = 'b0; 
                         carry = 1'b0;

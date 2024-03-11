@@ -98,11 +98,19 @@ module Control_unit(
                             alu_imm = 1;
                             display = 0;
                         end
-                        5'b00111:begin //Add immediate
+                        5'b11001: begin // Less than
                             mem_read_en = 0;
                             mem_write_en = 0;
-                            data_to_reg = 2'b10;
-                            reg_write_en = 1;
+                            data_to_reg = 2'b00;
+                            reg_write_en = 0;
+                            alu_imm = 0;
+                            display = 0;
+                        end
+                        5'b00111:begin //Less than immediate
+                            mem_read_en = 0;
+                            mem_write_en = 0;
+                            data_to_reg = 2'b00;
+                            reg_write_en = 0;
                             display = 0;
                             alu_imm = 1;
                         end

@@ -28,15 +28,15 @@ module instruction_memory(
     
     initial
  begin
-    memory[0] = 16'b01_00001_001_000001; // LOAD 1 IN R1
-    memory[1] = 16'b11_10110_001_111111; // DISPLAY R1
-    memory[2] = 16'b01_00001_000_000101; // LOAD 5 IN R0
-    memory[3] = 16'b00_01110_001_000_001; // R1 = R0 * R1
-    memory[4] = 16'b00_00110_000_000001; // SUB IMM R0 BY 1
-    memory[5] = 16'b00_10001_000_000001;
-    memory[6] = 16'b11_10110_001_111111; // DISPLAY R1
-    memory[7] = 16'b10_10100_000011_001; // JUMP TO 3
-    memory[8] = 16'b11_10110_001_111111; // DISPLAY R1
+    memory[0] = 16'b01_00001_000_000000; // LOAD 0 IN R0
+    memory[1] = 16'b11_10110_000_111111; // DISPLAY R0
+    memory[2] = 16'b00_00100_000_000010; // ADD IMMEDIATE 2 IN R0
+    memory[3] = 16'b11_10110_000_111111;
+    memory[4] = 16'b00_00111_000_000111; // IS R0 < 7 
+    memory[5] = 16'b11_10110_000_111111;
+    //memory[5] = 16'b11_11000_111111111; // DISPLAY BOOLEAN
+    memory[6] = 16'b10_10100_000010_001; // BRANCH TO 2
+    memory[7] = 16'b11_11000_111111111;
  end
     
     assign instruction_out = memory[read_address];
