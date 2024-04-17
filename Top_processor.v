@@ -21,7 +21,10 @@
 
 
 module Top_processor(
+    input reset,
     input clk, clk_enable,
+    input [7:0] input_instruction,
+    input button,
     output [15:0] display_output
     );
     
@@ -31,7 +34,7 @@ module Top_processor(
     wire [1:0] data_to_reg;
     wire display;
     
-    datapath DataPath(clk, clk_enable,
+    datapath DataPath(reset, button,input_instruction,clk, clk_enable,
     mem_read_en, mem_write_en,
     reg_write_en, alu_imm, display,data_to_reg,
     display_output, opcode, type);

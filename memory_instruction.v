@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 28.01.2024 19:50:59
+// Create Date: 28.01.2024 19:57:34
 // Design Name: 
-// Module Name: memory_data
+// Module Name: memory_instruction
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,17 +20,15 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module data_memory(
-    input clk,
-    input clock_enable,
+module memory_instruction(
     input [5:0] read_address,write_address,
-    input read_enable,write_enable,
-    input [15:0] data_in,
-    output [15:0] data_out
+    input read_enable,
+    input [15:0] instruction_in,
+    output [15:0] instruction_out
 );
     reg [15:0] memory [0:63];
-    always @(posedge clk & write_enable & clock_enable) begin
-        memory[write_address] <= data_in;
+    always @(*) begin
+        memory[write_address] <= instruction_in;
     end
-    assign data_out = (read_enable==1'b1)?memory[read_address]:16'b0;
+    assign instruction_out = (read_enable==1'b1)?memory[read_address]:16'b0;
 endmodule

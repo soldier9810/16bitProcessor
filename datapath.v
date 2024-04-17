@@ -21,6 +21,10 @@
 
 
 module datapath(
+    input reset,
+    
+    input button,
+    input [7:0] input_instruction,
     input clk, clk_enable,
     input dm_read_enable,dm_write_enable,
     input reg_write_en, alu_imm, display,
@@ -47,7 +51,7 @@ module datapath(
     initial begin
         pc_current <= 6'd0;
     end
-    always @(posedge clk) begin 
+    always @(posedge clk & clk_enable) begin 
         pc_current <= pc_next;
     end
     
@@ -55,7 +59,8 @@ module datapath(
     
     // INSTRUCTION MEMORY
     
-    instruction_memory InstructionMemory(pc_current,
+    instruction_memory InstructionMemory(clk_enable, reset,clk,
+        input_instruction,button,pc_current,
         instruction);
     
     assign opcode = instruction[13:9];
@@ -78,6 +83,7 @@ module datapath(
             2'b01: register_write_data = data_out_dataMemory; // DATA FROM MEMORY TO REGISTER
             2'b10: register_write_data = accumulator; // DATA FROM ACCUMULATOR TO REGISTER
             2'b11: register_write_data = instruction[5:0]; // IMMEDIATE DATA TO REGISTER
+            default: register_write_data = 'b0;
         endcase
     end
     
@@ -94,7 +100,7 @@ module datapath(
     
     assign alu_second_input = (alu_imm == 1'b0)?reg_read_data_2:{10'b0,instruction[5:0]};
 
-    ALU ALU(type, reg_read_data_1, alu_second_input, instruction[13:9],
+    ALU ALU(clk, clk_enable, type, reg_read_data_1, alu_second_input, instruction[13:9],
     accumulator, carry,overflow,bool,zero);
     
    
@@ -120,14 +126,14 @@ module datapath(
     end
     
     // DISPLAY FUNCTION
-    always @(*) begin
+    always @(negedge clk & clk_enable) begin
         if (type == 2'b11) begin
             case(opcode)
             5'b10101: display_output <= accumulator; // DISPLAY ACCUMULATOR
             5'b10110: display_output <= reg_read_data_1; // DISPLAY REGISTER
             5'b10111: display_output <= data_out_dataMemory; // DISPLAY MEMORY
-            5'b11000: display_output <= bool; // DISPLAY BOOL VALUE
-            5'b11001: display_output <= pc_current;
+            5'b11000: display_output <= {15'b0, bool}; // DISPLAY BOOL VALUE
+            5'b11001: display_output <= {10'b0, pc_current};
             default: display_output <= accumulator;
             endcase
         end

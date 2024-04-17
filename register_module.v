@@ -36,7 +36,7 @@ module register_module(
     );
     reg [15:0] register [0:7];
   
- always @ (posedge clk) begin
+ always @ (posedge clk & clock_enable) begin
    if(reg_write_en) begin
     register[reg_write_dest] <= reg_write_data;
    end

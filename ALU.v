@@ -21,6 +21,7 @@
 
 
 module ALU(
+    input clk, clk_enable,
     input [1:0] type,
     input [15:0] r1,r2,
     input [4:0] opcode,
@@ -28,7 +29,7 @@ module ALU(
     output reg carry,overflow,bool,zero
     );
     
-    always @(*) begin
+    always @(negedge clk & clk_enable) begin
         if (type==2'b00) begin
         case (opcode)
             5'b00011: begin {carry,accumulator} = r1 + r2; // ADD

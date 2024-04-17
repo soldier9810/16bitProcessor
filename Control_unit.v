@@ -222,7 +222,7 @@ module Control_unit(
                         mem_read_en = 1;
                         display = 1;
                     end
-                    5'b11000: begin
+                    5'b11000: begin // DISPLAY BOOL
                         mem_read_en = 0;
                         display = 1;
                     end
@@ -236,6 +236,14 @@ module Control_unit(
                     end
                 endcase
             end
+            default: begin
+                        mem_write_en = 0;
+                        data_to_reg = 2'b00;
+                        alu_imm = 0;
+                        reg_write_en = 0;
+                        mem_read_en = 0;
+                        display = 0;
+                        end
         endcase
     end
 endmodule
