@@ -70,6 +70,7 @@ module instruction_memory(
                 counter <= counter + 1;
                 state <= next_state;
             end
+          
             //in0 <= {state,14'b000000000001111};
         end
     end
@@ -89,8 +90,8 @@ module instruction_memory(
 //    memory[8] = 16'b11_10110_001_111111; // DISPLAY R1
 // end
     
-    always @(posedge clk) begin
-        if (state==2'b10) instruction_out = memory[read_address];
+    always @(posedge clk & clk_enable) begin
+        instruction_out = memory[read_address];
     end
     
 endmodule
