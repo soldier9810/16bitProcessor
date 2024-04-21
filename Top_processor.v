@@ -25,7 +25,9 @@ module Top_processor(
     input clk, clk_enable,
     input [7:0] input_instruction,
     input button,
-    output [15:0] display_output
+    output [15:0] display_output,
+    output [15:0] led_ins,
+    input pc_butt
     );
     
     wire [4:0] opcode;
@@ -37,7 +39,7 @@ module Top_processor(
     datapath DataPath(reset, button,input_instruction,clk, clk_enable,
     mem_read_en, mem_write_en,
     reg_write_en, alu_imm, display,data_to_reg,
-    display_output, opcode, type);
+    display_output, opcode, type, led_ins, pc_butt);
     
     Control_unit ControlUnit(opcode, type, mem_read_en, mem_write_en, reg_write_en, alu_imm, display, data_to_reg);
 endmodule

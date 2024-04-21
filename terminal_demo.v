@@ -21,6 +21,7 @@
 
 
 module terminal_demo(
+    input [15:0] display_out,
     input clk, reset_n,
     
     // Receiver port
@@ -86,14 +87,14 @@ module terminal_demo(
     sseg_driver(
         .clk(clk),
         .reset_n(reset_n),
-        .I0({1'b1, w_data[3: 0], 1'b0}),
-        .I1({1'b1, w_data[7: 4], 1'b0}),
-        .I2(6'd0),
-        .I3(6'd0),
-        .I4(6'd0),
-        .I5(6'd0),
-        .I6({~rx_empty, r_data[3: 0], 1'b0}),
-        .I7({~rx_empty, r_data[7: 4], 1'b0}),
+        .I2({6'b0}),
+        .I3({6'b0}),
+        .I4({1'b1, display_out[3:0], 1'b0}),
+        .I5({1'b1, display_out[7:4], 1'b0}),
+        .I6({1'b1, display_out[11:8], 1'b0}),
+        .I7({1'b1, display_out[15:12], 1'b0}),
+        .I0({~rx_empty, r_data[3: 0], 1'b0}),
+        .I1({~rx_empty, r_data[7: 4], 1'b0}),
         .AN(AN),
         .sseg(sseg),
         .DP(DP)

@@ -27,52 +27,50 @@ module instruction_memory(
     input [7:0] instruction,
     input button,
     input [5:0] read_address,
-    output reg [15:0] instruction_out
+    output reg [15:0] instruction_out,
+    output [15:0] led_ins
 );
     reg [1:0] state, next_state;
     reg [15:0] memory [0:63];
-    reg [5:0] counter;
+    reg [5:0] counter; 
     
     initial begin
-        state = 0;
-        counter = 0;
+        state <= 0;
+        counter <= 0;
     end
     
     always @(*)begin
         case (state)
-            2'b00: next_state = 2'b01;
-            2'b01: next_state = 2'b10;
-            2'b10: next_state = 2'b00;
+            2'b00: next_state <= 2'b01;
+            2'b01: next_state <= 2'b10;
+            2'b10: next_state <= 2'b00;
         endcase
     end
     
-    
-    
-    always @( posedge button,negedge reset) begin
-        
-        if(reset==0)
-        begin
-        state<=0;
-        counter<=0;
-        end
-        else
+    always @(posedge button ,negedge reset) begin
+            if(reset==0)
             begin
-            if (state == 2'b00) begin
-                memory[counter] <= {instruction[5:0],10'b0};
-                state <= next_state;
+            state<=0;
+            counter<=0;
             end
-            else if (state == 2'b01) begin
-                memory[counter] <= memory[counter]|{6'b0,instruction[5:0],4'b0};
-                state <= next_state;
+            else
+                begin
+                if (state == 2'b00) begin
+                    memory[counter] <= {instruction[5:0],10'b0};
+                    state <= next_state;
+                end
+                else if (state == 2'b01) begin
+                    memory[counter] <= memory[counter]|{6'b0,instruction[5:0],4'b0};
+                    state <= next_state;
+                end
+                else if (state == 2'b10) begin
+                    memory[counter] <= memory[counter]|{12'b0,instruction[3:0]};
+                    counter <= counter + 1;
+                    state <= next_state;
+                end
+              
+                //in0 <= {state,14'b000000000001111};
             end
-            else if (state == 2'b10) begin
-                memory[counter] <= memory[counter]|{12'b0,instruction[3:0]};
-                counter <= counter + 1;
-                state <= next_state;
-            end
-          
-            //in0 <= {state,14'b000000000001111};
-        end
     end
     
     
@@ -93,5 +91,9 @@ module instruction_memory(
     always @(posedge clk & clk_enable) begin
         instruction_out = memory[read_address];
     end
+    
+    //assign instruction_out = memory[read_address];
+    
+    assign led_ins = memory[counter];
     
 endmodule
